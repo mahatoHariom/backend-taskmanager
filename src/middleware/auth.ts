@@ -11,8 +11,9 @@ export const authenticateToken = (
     next: NextFunction
 ): void => {
     try {
-        // Get token from HTTP-only cookie
-        const token = req.cookies.token;
+        // Get token from Authorization header
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(' ')[1];
 
         if (!token) {
             res.status(401).json({ error: 'Access denied. No token provided.' });

@@ -16,11 +16,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
         const { name, email, password } = req.body;
 
-        const user = await authService.register({ name, email, password });
+        const { user, token } = await authService.register({ name, email, password });
 
         res.status(201).json({
             message: 'User registered successfully',
             user,
+            token,
         });
     } catch (error: any) {
         console.error('Registration error:', error);
@@ -50,17 +51,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         const { token, user } = await authService.login({ email, password });
 
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' required for cross-domain
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        });
-
         res.json({
             message: 'Login successful',
             user,
+            token,
         });
     } catch (error: any) {
         console.error('Login error:', error);
@@ -79,11 +73,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
  */
 export const logout = async (_req: Request, res: Response): Promise<void> => {
     try {
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        });
         res.json({ message: 'Logout successful' });
     } catch (error) {
         console.error('Logout error:', error);

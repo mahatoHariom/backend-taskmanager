@@ -47,7 +47,14 @@ export class AuthService {
             },
         });
 
-        return user;
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user.id },
+            process.env.JWT_SECRET as string,
+            { expiresIn: '7d' }
+        );
+
+        return { user, token };
     }
 
     /**
