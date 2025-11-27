@@ -43,8 +43,8 @@ app.use('/api', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
 // Health check
-app.get('/health', (res: Response) => {
-    res.json({ status: 'OK', message: 'Server is running' });
+app.get('/health', (_req: Request, res: Response) => {
+    res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
 // Error handling middleware
