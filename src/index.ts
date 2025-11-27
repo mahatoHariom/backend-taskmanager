@@ -43,18 +43,19 @@ app.use('/api', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
 // Health check
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (res: Response) => {
     res.json({ status: 'OK', message: 'Server is running' });
 });
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error('Error:', err);
+    console.error('Error:', err, req, res, next);
     res.status(500).json({ error: 'Something went wrong!' });
 });
 
 // 404 handler
 app.use((req: Request, res: Response) => {
+    console.error('Error:', req, res);
     res.status(404).json({ error: 'Route not found' });
 });
 
