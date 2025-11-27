@@ -48,14 +48,12 @@ app.get('/health', (res: Response) => {
 });
 
 // Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error('Error:', err, req, res, next);
+app.use((_err: Error, _req: Request, res: Response, _next: NextFunction) => {
     res.status(500).json({ error: 'Something went wrong!' });
 });
 
 // 404 handler
-app.use((req: Request, res: Response) => {
-    console.error('Error:', req, res);
+app.use((_req: Request, res: Response) => {
     res.status(404).json({ error: 'Route not found' });
 });
 
