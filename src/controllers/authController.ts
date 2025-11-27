@@ -77,9 +77,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 /**
  * Logout user
  */
-export const logout = async (res: Response): Promise<void> => {
+export const logout = async (_req: Request, res: Response): Promise<void> => {
     try {
-        res.clearCookie('token');
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        });
         res.json({ message: 'Logout successful' });
     } catch (error) {
         console.error('Logout error:', error);
